@@ -1,24 +1,11 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "next build",
-  "devCommand": "next dev",
+  "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "regions": ["iad1"],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
-    "JWT_SECRET": "@jwt_secret",
-    "PAYMOB_API_KEY": "@paymob_api_key",
-    "PAYMOB_INTEGRATION_ID": "@paymob_integration_id",
-    "PAYMOB_IFRAME_ID": "@paymob_iframe_id",
-    "PAYMOB_HMAC_SECRET": "@paymob_hmac_secret",
-    "STREAMING_SECRET_KEY": "@streaming_secret_key"
-  },
   "headers": [
     {
-      "source": "/api/:path*",
+      "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "*" },

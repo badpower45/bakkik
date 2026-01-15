@@ -1,7 +1,7 @@
 {
   "name": "evolution-championship-backend",
   "version": "1.0.0",
-  "description": "Backend API for Evolution Championship MMA App",
+  "description": "Backend API for Evolution Championship MMA App - Production Ready",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
