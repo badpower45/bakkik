@@ -40,7 +40,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 
   // Send password reset email
   const { error } = await supabaseAdmin.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/reset-password`,
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://bakkik.vercel.app'}/reset-password`,
   });
 
   if (error) {
