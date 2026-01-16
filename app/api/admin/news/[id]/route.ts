@@ -8,7 +8,7 @@ import { z } from 'zod';
 const updateNewsSchema = z.object({
     title: z.string().min(1).optional(),
     content: z.string().min(1).optional(),
-    image_url: z.string().url().optional(),
+    image_url: z.string().url().nullable().optional(),
     event_id: z.string().nullable().optional(),
     fighter_id: z.string().uuid().nullable().optional(),
     published: z.boolean().optional(),

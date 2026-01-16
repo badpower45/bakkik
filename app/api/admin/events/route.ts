@@ -12,7 +12,7 @@ const createEventSchema = z.object({
     description: z.string().optional(),
     event_date: z.string(), // ISO date
     location: z.string().min(1),
-    poster_image: z.string().url().optional(),
+    poster_image: z.string().url().nullable().optional(),
     registration_open_at: z.string().optional(),
     registration_close_at: z.string().optional(),
     registration_fee: z.number().optional(),
