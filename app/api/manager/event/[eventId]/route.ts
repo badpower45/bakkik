@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { requireAdmin } from '@/lib/middleware/admin';
+import { requireAuth } from '@/lib/middleware/auth';
 import { successResponse } from '@/lib/utils/response';
 import { withErrorHandler } from '@/lib/middleware/error';
 import { supabaseAdmin } from '@/lib/supabase/client';
@@ -12,7 +12,32 @@ export const GET = withErrorHandler(async (
     request: NextRequest,
     { params }: { params: { eventId: string } }
 ) => {
-    await requireAdmin(request);
+    // Verify auth
+    const authUser = await requireAuth(request);
+
+    const { data: user } = await supabaseAdmin
+        .from('users')
+        .select('id, user_type')
+        .eq('auth_id', authUser.id)
+        .single();
+
+    if (user?.user_type !== 'manager') {
+        throw new Error('Access denied: Manager role required');
+    }
+
+    const userId = user.id;
+
+    // Verify manager is assigned to this event
+    const { data: assignment } = await supabaseAdmin
+        .from('event_manager_assignments')
+        .select('*')
+        .eq('manager_id', userId)
+        .eq('event_id', params.eventId)
+        .single();
+
+    if (!assignment) {
+        throw new Error('Access denied: Not assigned to this event');
+    }
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status'); // all, checked_in, pending

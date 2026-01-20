@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { requireAdmin } from '@/lib/middleware/admin';
+import { requireAuth } from '@/lib/middleware/auth';
 import { successResponse, errorResponse } from '@/lib/utils/response';
 import { withErrorHandler, ValidationError } from '@/lib/middleware/error';
 import { supabaseAdmin } from '@/lib/supabase/client';
@@ -15,7 +15,20 @@ const scanSchema = z.object({
  * Validate QR code and return ticket details
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
-    const { userData } = await requireAdmin(request);
+    // Verify auth
+    const authUser = await requireAuth(request);
+
+    const { data: user } = await supabaseAdmin
+        .from('users')
+        .select('id, user_type')
+        .eq('auth_id', authUser.id)
+        .single();
+
+    if (!user || !['manager', 'admin'].includes(user.user_type)) {
+        throw new Error('Access denied: Manager or Admin role required');
+    }
+
+    const userId = user.id;
 
     const body = await request.json();
     const validation = scanSchema.safeParse(body);
@@ -78,7 +91,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
         .from('ticket_scans')
         .insert({
             ticket_id: ticket.id,
-            scanned_by: userData.id,
+            scanned_by: userId,
             scan_type: 'verification',
             status: 'valid',
         });

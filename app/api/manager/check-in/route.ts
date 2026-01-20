@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { requireAdmin } from '@/lib/middleware/admin';
+import { requireAuth } from '@/lib/middleware/auth';
 import { successResponse } from '@/lib/utils/response';
 import { withErrorHandler, ValidationError } from '@/lib/middleware/error';
 import { supabaseAdmin } from '@/lib/supabase/client';
@@ -14,7 +14,20 @@ const checkInSchema = z.object({
  * Check in a ticket
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
-    const { userData } = await requireAdmin(request);
+    // Verify auth
+    const authUser = await requireAuth(request);
+
+    const { data: user } = await supabaseAdmin
+        .from('users')
+        .select('id, user_type')
+        .eq('auth_id', authUser.id)
+        .single();
+
+    if (!user || !['manager', 'admin'].includes(user.user_type)) {
+        throw new Error('Access denied: Manager or Admin role required');
+    }
+
+    const userId = user.id;
 
     const body = await request.json();
     const validation = checkInSchema.safeParse(body);
@@ -29,7 +42,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     const { data, error } = await supabaseAdmin
         .rpc('check_in_ticket', {
             p_ticket_id: ticketId,
-            p_manager_id: userData.id,
+            p_manager_id: userId,
         });
 
     if (error) {

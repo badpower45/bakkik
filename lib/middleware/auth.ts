@@ -65,3 +65,6 @@ export async function requireAdmin(request: NextRequest) {
 
     return user;
 }
+
+// Export alias for compatibility
+export const verifyAdmin = requireAdmin;
