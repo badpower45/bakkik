@@ -26,7 +26,10 @@ export async function GET(
             throw error;
         }
 
-        return successResponse(data, 'Academy retrieved successfully');
+        return successResponse({
+            academy: data,
+            message: 'Academy retrieved successfully',
+        });
     } catch (error: any) {
         console.error('Get academy error:', error);
         return errorResponse(error.message, 500);
@@ -64,7 +67,10 @@ export async function PATCH(
             throw error;
         }
 
-        return successResponse(data, 'Academy updated successfully');
+        return successResponse({
+            academy: data,
+            message: 'Academy updated successfully',
+        });
     } catch (error: any) {
         console.error('Update academy error:', error);
         return errorResponse(error.message, 500);
@@ -89,7 +95,7 @@ export async function DELETE(
 
         if (error) throw error;
 
-        return successResponse(null, 'Academy deleted successfully');
+        return successResponse({ message: 'Academy deleted successfully' });
     } catch (error: any) {
         console.error('Delete academy error:', error);
         return errorResponse(error.message, 500);

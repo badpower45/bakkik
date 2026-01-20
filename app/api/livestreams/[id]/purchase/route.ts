@@ -14,7 +14,7 @@ export async function POST(
   try {
     // Verify authentication
     const authResult = await verifyAuth(request);
-    if (!authResult.success) {
+    if (!authResult.success || !authResult.user) {
       return errorResponse('Unauthorized', 401);
     }
 

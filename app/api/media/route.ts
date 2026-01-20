@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     let userId: string | null = null;
     try {
       const authResult = await verifyAuth(request);
-      if (authResult.success) {
+      if (authResult.success && authResult.user) {
         userId = authResult.user.id;
       }
     } catch (e) {

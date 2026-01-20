@@ -22,7 +22,10 @@ export async function GET(
     
     if (error && error.code !== 'PGRST116') throw error; // PGRST116 = not found, which is OK
     
-    return successResponse(data || null, 'Fighter profile retrieved successfully');
+    return successResponse({
+      profile: data || null,
+      message: 'Fighter profile retrieved successfully',
+    });
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }
@@ -53,7 +56,10 @@ export async function POST(
     
     if (error) throw error;
     
-    return successResponse(data, 'Fighter profile updated successfully', 201);
+    return successResponse({
+      profile: data,
+      message: 'Fighter profile updated successfully',
+    }, 201);
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }

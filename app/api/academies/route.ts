@@ -28,7 +28,10 @@ export async function GET(request: NextRequest) {
 
         if (error) throw error;
 
-        return successResponse(data, 'Academies retrieved successfully');
+        return successResponse({
+            academies: data || [],
+            message: 'Academies retrieved successfully',
+        });
     } catch (error: any) {
         console.error('Get academies error:', error);
         return errorResponse(error.message, 500);
@@ -60,7 +63,10 @@ export async function POST(request: NextRequest) {
 
         if (error) throw error;
 
-        return successResponse(data, 'Academy created successfully', 201);
+        return successResponse({
+            academy: data,
+            message: 'Academy created successfully',
+        }, 201);
     } catch (error: any) {
         console.error('Create academy error:', error);
         return errorResponse(error.message, 500);

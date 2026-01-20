@@ -35,9 +35,12 @@ export async function GET(
     if (fightersError) throw fightersError;
     
     return successResponse({
-      ...gym,
-      fighters
-    }, 'Gym details retrieved successfully');
+      gym: {
+        ...gym,
+        fighters,
+      },
+      message: 'Gym details retrieved successfully',
+    });
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }
@@ -68,7 +71,10 @@ export async function PATCH(
     
     if (error) throw error;
     
-    return successResponse(data, 'Gym updated successfully');
+    return successResponse({
+      gym: data,
+      message: 'Gym updated successfully',
+    });
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }

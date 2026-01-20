@@ -79,7 +79,10 @@ export async function GET(request: NextRequest) {
             };
         });
 
-        return successResponse(rankings, 'Rankings retrieved successfully');
+        return successResponse({
+            rankings,
+            message: 'Rankings retrieved successfully',
+        });
     } catch (error: any) {
         console.error('Get rankings error:', error);
         return errorResponse(error.message, 500);

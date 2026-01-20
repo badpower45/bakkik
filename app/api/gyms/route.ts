@@ -31,7 +31,10 @@ export async function GET(request: NextRequest) {
     
     if (error) throw error;
     
-    return successResponse(data, 'Gyms retrieved successfully');
+    return successResponse({
+      gyms: data || [],
+      message: 'Gyms retrieved successfully',
+    });
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }
@@ -54,7 +57,10 @@ export async function POST(request: NextRequest) {
     
     if (error) throw error;
     
-    return successResponse(data, 'Gym created successfully', 201);
+    return successResponse({
+      gym: data,
+      message: 'Gym created successfully',
+    }, 201);
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }

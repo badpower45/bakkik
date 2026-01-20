@@ -55,8 +55,9 @@ export async function GET(
       fighter,
       fight_history: fightHistory || [],
       next_fight: nextFight || null,
-      media: media || []
-    }, 'Fighter profile retrieved successfully');
+      media: media || [],
+      message: 'Fighter profile retrieved successfully',
+    });
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }

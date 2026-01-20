@@ -22,7 +22,10 @@ export async function GET(
     
     if (error) throw error;
     
-    return successResponse(data, 'Fight history retrieved successfully');
+    return successResponse({
+      history: data || [],
+      message: 'Fight history retrieved successfully',
+    });
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }
@@ -52,7 +55,10 @@ export async function POST(
     
     if (error) throw error;
     
-    return successResponse(data, 'Fight added to history successfully', 201);
+    return successResponse({
+      fight: data,
+      message: 'Fight added to history successfully',
+    }, 201);
   } catch (error: any) {
     return errorResponse(error.message, 500);
   }

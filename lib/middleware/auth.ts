@@ -36,6 +36,29 @@ export async function requireAuth(request: NextRequest) {
 }
 
 /**
+ * Verify auth without throwing
+ */
+export async function verifyAuth(request: NextRequest) {
+    try {
+        const authUser = await requireAuth(request);
+
+        const { data: userData, error } = await supabase
+            .from('users')
+            .select('id, email, name, user_type')
+            .eq('auth_id', authUser.id)
+            .single();
+
+        if (error || !userData) {
+            return { success: false, error: 'User not found' };
+        }
+
+        return { success: true, user: userData, auth: authUser };
+    } catch (error: any) {
+        return { success: false, error: error?.message || 'Unauthorized' };
+    }
+}
+
+/**
  * Optional authentication - doesn't throw if not authenticated
  */
 export async function optionalAuth(request: NextRequest) {

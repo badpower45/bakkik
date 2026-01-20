@@ -63,7 +63,10 @@ export async function GET(request: NextRequest) {
                 };
             });
 
-        return successResponse(champions, 'Champions retrieved successfully');
+        return successResponse({
+            champions,
+            message: 'Champions retrieved successfully',
+        });
     } catch (error: any) {
         console.error('Get champions error:', error);
         return errorResponse(error.message, 500);
